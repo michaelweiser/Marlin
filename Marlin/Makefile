@@ -382,19 +382,21 @@ CXXINCS = ${addprefix -I ,${VPATH}}
 # c99   - ISO C99 standard (not yet fully implemented)
 # gnu99 - c99 plus GCC extensions
 #CSTANDARD = -std=gnu99
+CXXSTANDARD = -std=gnu++11
 CDEBUG = -g$(DEBUG)
-CWARN = -Wall -Wstrict-prototypes
+CWARN = -Wall
 CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct \
-	-fshort-enums -w -ffunction-sections -fdata-sections \
+	-fshort-enums -ffunction-sections -fdata-sections \
 	-DARDUINO=$(ARDUINO_VERSION)
 ifneq ($(HARDWARE_MOTHERBOARD),)
 CTUNING += -DMOTHERBOARD=${HARDWARE_MOTHERBOARD}
 endif
 #CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
-CEXTRA = -fno-use-cxa-atexit
+CEXTRA =
+CXXEXTRA = -fno-use-cxa-atexit
 
-CFLAGS := $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CEXTRA) $(CTUNING)
-CXXFLAGS :=         $(CDEFS) $(CINCS) -O$(OPT) -Wall    $(CEXTRA) $(CTUNING)
+CFLAGS :=   $(CSTANDARD)   $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CEXTRA) $(CTUNING)
+CXXFLAGS := $(CXXSTANDARD) $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CXXEXTRA) $(CTUNING)
 #ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
 LDFLAGS = -lm
 
