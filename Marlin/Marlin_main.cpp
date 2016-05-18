@@ -1569,7 +1569,11 @@ static void setup_for_endstop_move() {
       #endif
 
       // move down slowly until you find the bed
+      #if defined(Z_PROBE_SPEED) && Z_PROBE_SPEED > 0
+      feedrate = Z_PROBE_SPEED;
+      #else
       feedrate = homing_feedrate[Z_AXIS] / 4;
+      #endif
       destination[Z_AXIS] = -10;
       prepare_move_raw(); // this will also set_current_to_destination
       stepper.synchronize();
@@ -2607,7 +2611,7 @@ inline void gcode_G28() {
   stepper.synchronize();
 
   // For auto bed leveling, clear the level matrix
-  #if ENABLED(AUTO_BED_LEVELING_FEATURE)
+  #if ENABLED(AUTO_BED_LEVELING_FEATURE) && DISABLED(AUTO_BED_LEVELING_SURVIVES_AUTO_HOME)
     planner.bed_level_matrix.set_to_identity();
     #if ENABLED(DELTA)
       reset_bed_level();
